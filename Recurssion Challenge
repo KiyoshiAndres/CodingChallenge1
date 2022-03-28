@@ -1,0 +1,40 @@
+def inputIterator(start, numberOfTestCases, arrayOfSquaredSums):
+    '''A function to receive input, and process it.'''
+    if start < 0 or start > numberOfTestCases:
+        return arrayOfSquaredSums
+
+    arraySize = input()
+    # Map input sequences to a list of integers
+    numbers = list(map(int, input().split()))
+
+    # Append sum of squares of non-negative numbers
+    arrayOfSquaredSums.append(getSum(numbers, 0, int(arraySize), 0))
+
+    # Move on to process the next input
+    return inputIterator(start + 1, numberOfTestCases, arrayOfSquaredSums)
+
+
+def getSum(lst, start, arraySize, sum):
+    '''Returns sum of elements in a list.'''
+    if start >= arraySize:
+        return sum
+    if lst[start] > 0:
+        sum += lst[start] ** 2
+    return getSum(lst, start + 1, arraySize, sum)
+
+
+def printer(lst, start):
+    '''Print elements in a list.'''
+    if start >= len(lst):
+        return
+    print(lst[start])
+    printer(lst, start + 1)
+
+
+def main():
+    arrayOfSquaredSums = inputIterator(1, int(input()), [])
+    printer(arrayOfSquaredSums, 0)
+
+
+if __name__ == "__main__":
+    main()
