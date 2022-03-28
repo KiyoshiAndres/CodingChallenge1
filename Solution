@@ -1,0 +1,41 @@
+# Challenge is to find an efficient algorithm to compute the maximum of trailing differences in an array, returning -1 if there is no differences. 
+# For example, [3] returns -1, [4,2] returns -1, [2,4] returns 2, [3,3] returns -1 and so on.
+# My solution takes inspiration on Cantor's middle third theorem.
+
+def maxTrailing(arr):
+    # Write your code here
+    array = arr.copy()
+    
+    # The array of extremal values are the maximal differences on the two corners that get removed iteratively
+    # from the array. We reduce the problem to a smaller array each time, as we can always discard the corners.
+    
+    extremalValues = []
+
+    while array.index(min(array)) > array.index(max(array)):
+        startPoint = array.index(min(array))
+        endPoint = array.index(max(array)) + 1
+        if len(array) == len(array[startPoint : endPoint]):
+            break
+        if array.index(max(array[startPoint:])) != array.index(min(array)):
+            extremalValues.append(max(array[startPoint:]) - min(array))
+        if array.index(min(array[:endPoint])) != array.index(max(array)):
+            extremalValues.append(max(array) - min(array[:endPoint]))
+        array = array[endPoint:startPoint]
+        if array == []:
+            break
+    print(array)
+    print(extremalValues)
+    
+    # len(array) == 1 is required for a corner case in which the problem is reduced to a single element array
+    
+    if (extremalValues == [] or set(extremalValues) == [0]) and (array == [] or len(array) == 1):
+        result = -1
+    elif extremalValues != [] and array == []:
+        result = max(extremalValues)
+    elif extremalValues != [] and array != []:
+        result = max(max(extremalValues), max(array) - min(array))
+    else:
+        result = max(arr) - min(arr)
+    if result == 0:
+        result = -1
+    return result
